@@ -52,10 +52,16 @@ function drawScreen() {
     cl (xWidth, yHeight)
 
     context.fillStyle = backgroundColor
-    context.beginPath()     // draw and clipout top triangle
-    context.moveTo(xWidth, 0)
-    context.lineTo(0,0)
-    context.lineTo(0, yHeight)
+    context.beginPath()             // draw top triangle
+    context.moveTo(xWidth, 0)       // tr
+    context.lineTo(0,0)             // corner
+    context.lineTo(0, yHeight)      // bl
+    context.fill()                  
+
+    context.beginPath()             // draw bottom triangle
+    context.moveTo(width - xWidth, height)  //bl
+    context.lineTo(width,height)    // corner
+    context.lineTo(width, height - yHeight) // tr
     context.fill()
 
 }
