@@ -35,6 +35,7 @@ sizeCanvas();   // Begin the resize loop by creating canvas
 
 function drawScreen() {
 
+    const goldenRatio = .382
     let width = innerWidth
     let height = innerHeight
     let backgroundColor = 'black'
@@ -42,13 +43,22 @@ function drawScreen() {
     context.fillStyle = backgroundColor             // set background color
     context.fillRect(0, 0, width, height)
 
-    const c = new Image()                   // draw background image
+    const c = new Image()                   // draw foreground image
     c.src = "bostonSat.webp"   
     context.drawImage(c, 0, 0)
 
+    xWidth = Math.round(width*goldenRatio)   //  make the triangle cutout (top)
+    yHeight = Math.round(height*goldenRatio)
+    cl (xWidth, yHeight)
+
+    context.fillStyle = backgroundColor
+    context.beginPath()     // draw and clipout top triangle
+    context.moveTo(xWidth, 0)
+    context.lineTo(0,0)
+    context.lineTo(0, yHeight)
+    context.fill()
+
 }
-
-
 
 
 }   //onload wrapper
