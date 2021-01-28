@@ -35,7 +35,7 @@ sizeCanvas();   // Begin the resize loop by creating canvas
 
 function drawScreen() {
 
-    intensity = 1.65                        // THe golden ratio is peaceful - this sharpens it
+    intensity = 1.6                        // THe golden ratio is peaceful - this sharpens it
     let goldenRatio = .382 * intensity
 
     let width = innerWidth
@@ -45,43 +45,48 @@ function drawScreen() {
     context.fillStyle = backgroundColor             // set background color in case u want to use mask
     context.fillRect(0, 0, width, height)           // try a mask varient and compare performance
 
-    const c = new Image()                   // draw foreground image
+// draw foreground image
+
+    const c = new Image()                   
     c.src = "bostonSat.webp"   
     context.drawImage(c, 0, 0)
 
-    xWidth = Math.round(width*goldenRatio)   //  make the triangle cutout (top) - set initial distance from corner
+// draw triangle cutouts
+
+    xWidth = Math.round(width*goldenRatio)   //  top - set initial distance from  top left corner
     yHeight = Math.round(height*goldenRatio)
 
     context.fillStyle = backgroundColor // draw top triangle
     context.beginPath()             
-    context.moveTo(xWidth, 0)       // tr
-    context.lineTo(0,0)             // corner
-    context.lineTo(0, yHeight)      // bl
-    context.fill()                  // last path is implicit
+    context.moveTo(xWidth, 0)       // top right
+    context.lineTo(0,0)             // top left corner
+    context.lineTo(0, yHeight)      // bottom left
+    context.fill()                  // draw (last path is implicit)
 
     context.beginPath()                     // draw bottom triangle
-    context.moveTo(width - xWidth, height)  //bl
-    context.lineTo(width,height)            // corner
-    context.lineTo(width, height - yHeight) // tr
+    context.moveTo(width - xWidth, height)  // bottom left
+    context.lineTo(width,height)            // bottom right corner
+    context.lineTo(width, height - yHeight) // top right
     context.fill()
 
-    function dynamicFontSize (originalFontSize, originalCanvsSize = 1360) {
-        
+//draw text
+
+    function dynamicFontSize (originalFontSize = 55, originalCanvsSize = 1360) { // in design params/out adjusted font size
+        percentOfFullSize = innerWidth/originalCanvsSize                                
+        adjustedLinearFontSize = originalFontSize*percentOfFullSize                     //linear trnsform
+        adjustedNonlinearFontSize = originalFontSize /(1-Math.log(percentOfFullSize))   //nonlinear transform
+
+        cl(adjustedLinearFontSize, adjustedNonlinearFontSize)
+        return(adjustedNonlinearFontSize)
     }
 
-    baseFontSize = 55       // What was the initial full screen desktop font at 1360px
-    // cl(width)
-    percentOfFullSize = width/1360 // ratio of current screen/full screen
-    adjustedLinearFontSize = baseFontSize*percentOfFullSize       // linear scaling to the ratio // try to sow down
-    
-    adjustedNonlinearFontSize = baseFontSize /(1-Math.log(percentOfFullSize))   //Experimental
+    currentFont = 'Courier'
+    calculatedFont = dynamicFontSize(55, 1360)
 
-    cl(adjustedLinearFontSize, adjustedNonlinearFontSize)
+    calculatedFontString = (`${adjustedNonlinearFontSize}px ${currentFont}`)        //string creation
+    cl(calculatedFontString)
 
-    calculatedFont = (`${adjustedNonlinearFontSize}px Courier`)        //string creation
-    cl(calculatedFont)
-
-    context.font = calculatedFont                           // assign to the object
+    context.font = calculatedFontString                     // assign to the object
     context.fillStyle = "#7aa600"                           // green pulled from picture
     context.fillText('Luke Wilcox', 20, 80)
 
@@ -89,7 +94,7 @@ function drawScreen() {
  
 
                                                             // write all this calculation as a function
-}   //drawScreen function
+}   //end drawScreen function
 
 
-}   //onload wrapper
+}   // end onload wrapper
