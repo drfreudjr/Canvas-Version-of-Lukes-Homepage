@@ -31,11 +31,13 @@ addEventListener("resize", sizeCanvas); // Event listener
 
 sizeCanvas();   // Begin the resize loop by creating canvas
 
-// // // // // // // // // // // Evrything above here is BP responsive full-screen canvas
+// // // // // // // // // // // Evrything above here is responsive full-screen canvas - below is page-specific
 
 function drawScreen() {
 
-    const goldenRatio = .382
+    intensity = 1.2             // THe golden ratio is peaceful - this sharpens it
+    let goldenRatio = .382 * intensity
+
     let width = innerWidth
     let height = innerHeight
     let backgroundColor = 'black'
@@ -49,7 +51,6 @@ function drawScreen() {
 
     xWidth = Math.round(width*goldenRatio)   //  make the triangle cutout (top)
     yHeight = Math.round(height*goldenRatio)
-    cl (xWidth, yHeight)
 
     context.fillStyle = backgroundColor
     context.beginPath()             // draw top triangle
@@ -63,6 +64,23 @@ function drawScreen() {
     context.lineTo(width,height)    // corner
     context.lineTo(width, height - yHeight) // tr
     context.fill()
+
+
+    baseFontSize = 35       // This is for full screen desktop (1360 wide)
+    cl(width)
+    percentOfFullSize = width/1360 // percent of full screen
+    adjustedFontSize = baseFontSize*percentOfFullSize
+    calculatedFont = (`${adjustedFontSize}px serif`)
+    cl(calculatedFont)
+
+    context.font = calculatedFont
+    context.fillStyle = "#7aa600"
+    context.fillText('Luke Wilcox', 20, 40)
+
+    k = .6  // this constant scales to the above calculated font
+    context.font =  (`${adjustedFontSize*k}px serif`)
+    context.fillStyle = "#7aa600"
+    context.fillText('About Me', 20, 80)
 
 }
 
